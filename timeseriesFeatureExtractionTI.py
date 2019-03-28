@@ -50,10 +50,12 @@ objects03 = { '247189e61802': 'Kitchen Chair',
 objIndex = 2
 objects = [objects01,objects02,objects03][objIndex]
 
-door = cluster.findDoor(objects)
+# {ID: name}
+door = cluster.find_feature(objects, "Door")
+print(door)
 
 def main():
-    dataDir = '/field/'  #'/data/'
+    dataDir = '/field/'  #'/data/' #use /prac/ for smaller data set, /field/ for big
     fileName = "*.json"
     # fileName = "*07-*"  # "*2017-04-05.txt"
     numHome = 2  # Use everything is 'ALL'; otherwise integer
@@ -62,11 +64,16 @@ def main():
     showPLOT = False
     isNORMALIZED = True
     startDate = datetime.date(2017, 9, 1)
-    endDate = datetime.date(2017, 9, 29)
-
+    endDate = datetime.date(2017, 9, 4) #29 default
+    temp = []
+	# {(ID, feature): data}
     alldata = {}
     alldata, perDevice = preprocess.convert_to_DataFrame_TI(dataDir, fileName, numHome, numDevice, numModality, showPLOT, startDate, endDate)
-    print(alldata, perDevice)
+    cluster.do_cluster(alldata, door.keys(), 5)
+    #~ for key in door.keys():
+		#~ temp = alldata[(key, "accelx")]
+		#~ print("quick brown fox")
+		#~ print(temp)
     
     
 

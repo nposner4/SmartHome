@@ -1,6 +1,5 @@
 import readInJson
 
-
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.dates as dates
@@ -8,12 +7,13 @@ import matplotlib.gridspec as gridspec
 import numpy as np
 import pandas as pd
 import datetime
+from sklearn.cluster import KMeans
 from matplotlib.dates import DayLocator, HourLocator, DateFormatter, drange
 matplotlib.style.use('ggplot')
 
 
 
-def findDoor(objects):
+def find_feature(objects, feature):
 	door = {}
 	dataDir = '/field/'  #'/data/'
 	fileName = "*.json"
@@ -23,16 +23,38 @@ def findDoor(objects):
 	isNORMALIZED = True
 	startDate = datetime.date(2017, 9, 1)
 	endDate = datetime.date(2017, 9, 29)
-    
 	for key in objects.keys():
-		if "Door" in objects[key]:
+		if feature in objects[key]:
 			door[key] = objects[key]
-			print(door[key])
+	return door
 			
+
+def do_cluster(data, ke, n_cluster):
+	temp = []
+	for key in ke:
+		temp = data[(key, "accelx")]
+		print("quick brown fox")
+		print(temp)
+	cluster = []
+	for index, entry in temp.iterrows():
+		cluster.append([entry[0], float(str(entry[1])[11:13])])
+	#temp["timestamp"].map(lambda x:0)
+	data = temp
+	print(cluster)
+	kmeans = KMeans(n_clusters = n_cluster)
+	
+	kmeans.fit(cluster)
+	labels = kmeans.predict(cluster)
+	centers = kmeans.cluster_centers_
+	fig = plt.figure()	
+	plt.scatter(cluster[:,0],cluster[:,1], c=[matplotlib.cm.spectral(float(i) /10) for i in cluster.labels_])
+	plt.show()
+
 			
-		
-			
-			
+
+def day_of_time(timeframe):
+	 pass
+				
 			
 			
 		
