@@ -46,8 +46,18 @@ def do_cluster(data, ke, n_cluster):
 	kmeans.fit(cluster)
 	labels = kmeans.predict(cluster)
 	centers = kmeans.cluster_centers_
+	x = []
+	y = []
+	for point in cluster:
+		x.append(point[1])
+		y.append(point[0])
+		
+	# Create plot
 	fig = plt.figure()	
-	plt.scatter(cluster[:,0],cluster[:,1], c=[matplotlib.cm.spectral(float(i) /10) for i in cluster.labels_])
+	plt.scatter(x,y)
+	plt.title('Door')
+	plt.xlabel('Time')
+	plt.ylabel('Acceleration')
 	plt.show()
 
 			
