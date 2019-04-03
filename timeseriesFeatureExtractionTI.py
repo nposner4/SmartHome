@@ -16,6 +16,7 @@ matplotlib.style.use('ggplot')
 
 import preprocess
 import cluster
+import habits
 
 sensors = ['accelx', 'accely', 'accelz', 
            'magx', 'magy', 'magz', 
@@ -52,6 +53,7 @@ objects = [objects01,objects02,objects03][objIndex]
 
 # {ID: name}
 door = cluster.find_feature(objects, "Door")
+fridge = cluster.find_feature(objects, "Fridge")
 print(door)
 
 def main():
@@ -64,16 +66,13 @@ def main():
     showPLOT = False
     isNORMALIZED = True
     startDate = datetime.date(2017, 9, 1)
-    endDate = datetime.date(2017, 9, 4) #29 default
+    endDate = datetime.date(2017, 9, 2) #29 default
     temp = []
 	# {(ID, feature): data}
     alldata = {}
     alldata, perDevice = preprocess.convert_to_DataFrame_TI(dataDir, fileName, numHome, numDevice, numModality, showPLOT, startDate, endDate)
     cluster.do_cluster(alldata, door.keys(), 5)
-    #~ for key in door.keys():
-		#~ temp = alldata[(key, "accelx")]
-		#~ print("quick brown fox")
-		#~ print(temp)
+    habits.find_habits(alldata, fridge.keys(), 3)
     
     
 
