@@ -48,33 +48,29 @@ objects03 = { '247189e61802': 'Kitchen Chair',
               '247189e6c680': 'Tablet'
 }
 
-objIndex = 0
-objects = [objects01,objects02,objects03][objIndex]
 
-# {ID: name}
-door = cluster.find_feature(objects, "Door")
-
-
-def main():
-    dataDir = '/field/'  #'/data/' #use /prac/ for smaller data set, /field/ for big
+#~ Performs the algorithms which do the clustering
+def perform_cluster(objIndex, feature, cluster_nums):
+    # Get the object from the house
+    objects = [objects01,objects02,objects03][int(objIndex)]
+    door = cluster.find_feature(objects, feature)
+    
+    #Convert in into dataframe
+    dataDir = '/field/' 
     fileName = "*.json"
-    # fileName = "*07-*"  # "*2017-04-05.txt"
-    numHome = 0  # Use everything is 'ALL'; otherwise integer
-    numDevice = objects #'ALL'  # Use everything is 'ALL'; otherwise integer
-    numModality = [0, 10,11,12]#'ALL'  # Use everything is 'ALL'; otherwise integer      
+    numHome = int(objIndex)  
+    numDevice = objects 
+    numModality = [0, 10,11,12]     
     showPLOT = False
     isNORMALIZED = True
     startDate = datetime.date(2017, 9, 11)
-    endDate = datetime.date(2017, 9, 12) #29 default
+    endDate = datetime.date(2017, 9, 12) 
     temp = []
-    num_clusters = 12 # Define the number of clusters you want
-	# {(ID, feature): data}
+    num_clusters = int(cluster_nums) # Define the number of clusters you want
     alldata = {}
     alldata, perDevice = preprocess.convert_to_DataFrame_TI(dataDir, fileName, numHome, numDevice, numModality, showPLOT, startDate, endDate)
     cluster.do_cluster(alldata, door.keys(), num_clusters) # Plot the data points and find anomaly
-    habits.find_habits(alldata, door.keys(), num_clusters) # Plot the centers
+    habits.find_habits(alldata, door.keys(), num_clusters) # Plot the centers of the clusters
     
     
 
-
-if __name__ == "__main__":main()
