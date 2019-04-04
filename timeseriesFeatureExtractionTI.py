@@ -65,14 +65,15 @@ def main():
     numModality = [0, 10,11,12]#'ALL'  # Use everything is 'ALL'; otherwise integer      
     showPLOT = False
     isNORMALIZED = True
-    startDate = datetime.date(2017, 9, 1)
-    endDate = datetime.date(2017, 9, 2) #29 default
+    startDate = datetime.date(2017, 9, 11)
+    endDate = datetime.date(2017, 9, 12) #29 default
     temp = []
 	# {(ID, feature): data}
     alldata = {}
     alldata, perDevice = preprocess.convert_to_DataFrame_TI(dataDir, fileName, numHome, numDevice, numModality, showPLOT, startDate, endDate)
-    cluster.do_cluster(alldata, door.keys(), 5)
+    cluster.do_cluster(alldata, door.keys(), 12)
     habits.find_habits(alldata, fridge.keys(), 3)
+    habits.find_habits(alldata, door.keys(), 12)
     
     
 
