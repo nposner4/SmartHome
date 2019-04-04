@@ -19,21 +19,16 @@ def find_habits(data, ke, n_cluster):
 	temp = []
 	for key in ke:
 		temp = data[(key, "accelx")]
-		print("quick brown fox")
-		print(temp)
 	cluster = []
 	for index, entry in temp.iterrows():
 		cluster.append([entry[0], float(str(entry[1])[11:13])])
 	data = temp
-	print(cluster)
 	kmeans = KMeans(n_clusters = n_cluster)
 	
 	kmeans.fit(cluster)
 	labels = kmeans.predict(cluster)
 	centers = kmeans.cluster_centers_
 	
-	print(centers)
-	print("centers have been printed")
 	z = [t[::-1] for t in centers]
 	
 	plt.scatter(*zip(*z))

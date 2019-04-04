@@ -36,41 +36,49 @@ def do_cluster(data, ke, n_cluster):
         print(temp)
     cluster = []
     for index, entry in temp.iterrows():
-        cluster.append([entry[0], float(str(entry[1])[11:13])])
-	#temp["timestamp"].map(lambda x:0)
+        cluster.append([entry[0], float(str(entry[1])[11:13] + "." + str(entry[1])[14:16])])
     data = temp
-    print(cluster)
     kmeans = KMeans(n_clusters = n_cluster)
     kmeans.fit(cluster)
     labels = kmeans.predict(cluster)
     centers = kmeans.cluster_centers_
+    # Swap entries in tuples for plotting
     sort_center = [t[::-1] for t in centers]
-    print(sort_center)
+    
+    # Get threshold for the biggest distance between center
     threshold = 0
     l = list(map(lambda x: x[0], sort_center))
     l.sort()
     for i in range(len(l) - 1):
-        if abs(l[i+1] - l[i]) > threshold:
-            threshold = abs(l[i+1] - l[i])
-    print(threshold)            
+        if abs(l[i+1] - l[i]) / 2 > threshold:
+            threshold = abs(l[i+1] - l[i]) / 2          
     x = []
     y = []
+    x_anomaly = []
+    y_anomaly = []
     for point in cluster:
-        x.append(point[1])
-        y.append(point[0])
         min_d = 50
         for c in l:
             if abs(point[1] - c) < min_d:
                 min_d = abs(point[1] - c)
         if min_d > threshold:
-            print("ANOMALY FOUND " + str(point[1]))
+            x_anomaly.append(point[1])
+            y_anomaly.append(point[0])
+            print("ANOMALY FOUND ON TIME: " + str(point[1]))
+        else:
+            x.append(point[1])
+            y.append(point[0])
 		
 	# Create plot
-	#~ fig = plt.figure()	
-    plt.scatter(x,y)
-    plt.title('Door')
+    plt.close("all")
+    fig = plt.figure()
+    ax1 = fig.add_subplot(111)	
+    ax1.scatter(x,y, c= 'g', label = "data points")
+    ax1.scatter(x_anomaly, y_anomaly, c='r', label = "anomily")
+    plt.title('Clustering')
     plt.xlabel('Time')
     plt.ylabel('Acceleration')
+    plt.legend(loc = "upper left")
     plt.show()
 
 			
