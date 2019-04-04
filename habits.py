@@ -32,7 +32,7 @@ def find_habits(data, ke, n_cluster):
 	z = [t[::-1] for t in centers]
 	
 	plt.scatter(*zip(*z))
-	plt.title('Fridge')
+	plt.title('Cluster centers')
 	plt.xlabel('Time')
 	plt.ylabel('Acceleration')
 	plt.show()

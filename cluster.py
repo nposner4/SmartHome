@@ -12,12 +12,12 @@ from matplotlib.dates import DayLocator, HourLocator, DateFormatter, drange
 matplotlib.style.use('ggplot')
 
 
-
+# Finds the object we are looking for in the house and returns the feature.
 def find_feature(objects, feature):
 	door = {}
-	dataDir = '/field/'  #'/data/'
+	dataDir = '/field/'
 	fileName = "*.json"
-	numHome = "ALL"  # Use everything is 'ALL'; otherwise integer
+	numHome = "ALL" 
 	numModality = [0,1,2]
 	showPLOT = True
 	isNORMALIZED = True
@@ -29,6 +29,7 @@ def find_feature(objects, feature):
 	return door
 			
 
+# Does the clustering and plots it in the end
 def do_cluster(data, ke, n_cluster):
     temp = []
     for key in ke:
@@ -45,7 +46,7 @@ def do_cluster(data, ke, n_cluster):
     # Swap entries in tuples for plotting
     sort_center = [t[::-1] for t in centers]
     
-    # Get threshold for the biggest distance between center
+    # Get threshold for the biggest distance between neighbouring centers
     threshold = 0
     l = list(map(lambda x: x[0], sort_center))
     l.sort()
@@ -56,6 +57,9 @@ def do_cluster(data, ke, n_cluster):
     y = []
     x_anomaly = []
     y_anomaly = []
+    
+    # Get all the datapoints and spot the anomalies. An anomaly is defined by a data point
+    # that is further removed from a center than the biggest distance between two neighbouring centers
     for point in cluster:
         min_d = 50
         for c in l:
@@ -81,11 +85,7 @@ def do_cluster(data, ke, n_cluster):
     plt.legend(loc = "upper left")
     plt.show()
 
-			
 
-def day_of_time(timeframe):
-	 pass
-				
 			
 			
 		
